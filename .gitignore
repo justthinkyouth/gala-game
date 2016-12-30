@@ -2,6 +2,7 @@ target
 *.iml
 .idea
 web/content/META-INF/
+web/
 .classpath
 .settingsls
 .project
