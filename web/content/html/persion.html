@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Hello Word!</h1>
+    <input type="button" value="test" onclick="test()">
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+    function test() {
+        $.ajax({
+            url: ctx + "/game/addGame",
+            type: 'get',
+            dataType: 'json',
+            success: function (res) {
+                console.info(res);
+            }
+        });
+    }
+</script>
+</html>
