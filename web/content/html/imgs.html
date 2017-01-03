@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    html{
+        background:url(../fileUpload/mv/1.jpg) no-repeat top center fixed;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+        -o-background-size:cover;
+        background-size:cover;
+    }
+    .circle {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+        background-color: #d58512;
+        margin-top: calc(50vh - 300px);
+        margin-left: calc(50vw - 130px);
+        text-align: center;
+    }
+
+</style>
+<body>
+<div class="circle" onclick="start()"></div>
+<script src="../js/jquery.min.js"></script>
+<script>
+    var n = 1;
+    function setImg() {
+        n = n+1;
+        if(n > 9){
+            n = 1;
+        }
+        var imgUrl = "../fileUpload/mv/"+n+".jpg";
+        $("html").css("background-image","url("+imgUrl+")");
+    }
+
+    function start(){
+        setInterval(setImg, 100);
+    }
+</script>
+</body>
+</html>

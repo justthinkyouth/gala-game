@@ -3,37 +3,21 @@
 <head>
     <title>年会</title>
 </head>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
 <body>
-<h1>springMVC字节流输入上传文件</h1>
-<form name="userForm1" action="/game/addGame" enctype="multipart/form-data" method="post">
-    <div id="newUpload1">
-        <input type="file" name="file">
-    </div>
-    <input type="button" id="btn_add1" value="增加一行">
-    <input type="submit" value="上传">
-</form>
+<div class="container" style="text-align: center">
+    <h1>年会游戏</h1>
+    <form action="">
+        <span>奖项名称：</span><input type="text" name="name" value=""/>
+        <input type="submit" value="创建">
+    </form>
+</div>
 
+<script src="../bootstrap/js/bootstrap.min.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/app.js"></script>
 <script>
-    i = 1;
-    j = 1;
-    $(document).ready(function(){
-        $("#btn_add1").click(function(){
-            document.getElementById("newUpload1").innerHTML+='<div id="div_'+i+'"><input  name="file" type="file"  /><input type="button" value="删除"  onclick="del_1('+i+')"/></div>';
-            i = i + 1;
-        });
-        $("#btn_add2").click(function(){
-            document.getElementById("newUpload2").innerHTML+='<div id="div_'+j+'"><input  name="file_'+j+'" type="file"  /><input type="button" value="删除"  onclick="del_2('+j+')"/></div>';
-            j = j + 1;
-        });
-    });
-    function del_1(o){
-        document.getElementById("newUpload1").removeChild(document.getElementById("div_"+o));
-    }
-    function del_2(o){
-        document.getElementById("newUpload2").removeChild(document.getElementById("div_"+o));
-    }
+
 </script>
 </body>
 </html>
