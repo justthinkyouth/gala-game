@@ -1,8 +1,0 @@
-target
-*.iml
-.idea
-web/content/META-INF/MANIFEST.MF
-web/content/WEB-INF/
-.classpath
-.project
-
