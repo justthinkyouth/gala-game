@@ -11,16 +11,13 @@
     <mvc:default-servlet-handler/>
 
     <bean id="viewResolverCommon" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/views/"/>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/views/jsp/"/>
         <property name="suffix" value=".jsp"/>
-        <property name="viewClass">
-            <value>org.springframework.web.servlet.view.InternalResourceView</value>
-        </property>
-        <property name="order" value="1"/>
     </bean>
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>
-        <property name="maxUploadSize" value="5400000"/>
-        <property name="uploadTempDir" value="fileUpload/temp"/>
+        <property name="maxUploadSize" value="100000000000000000"/>
+        <property name="uploadTempDir" value="temp"/>
     </bean>
 </beans>

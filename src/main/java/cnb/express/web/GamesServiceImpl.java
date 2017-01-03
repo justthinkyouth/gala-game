@@ -1,15 +1,16 @@
 package cnb.express.web;
 
+import cnb.express.beans.GameBean;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tom on 16-12-30.
@@ -18,27 +19,54 @@ import java.io.IOException;
 @RequestMapping("game")
 public class GamesServiceImpl extends BaseServiceImpl{
 
+    private int fileNum = 1;
+    private Map<String,GameBean> dataMap = new HashMap<String, GameBean>();
+
     @RequestMapping(method = RequestMethod.GET)
     public String index(){
         return "index";
     }
 
     @RequestMapping(value = "addGame", method = RequestMethod.POST)
-    public String addGame(@RequestParam("file") CommonsMultipartFile[] files, HttpServletRequest req) {
-        String tempDir = req.getSession().getServletContext().getRealPath("/") + "fileUpload/temp/";
+    @ResponseBody
+    public String addGame(@RequestParam String name) {
+        GameBean game = new GameBean();
+        game.setGameName(name);
+        game.setStatus(0);
+        String key = "";
+        dataMap.put(key,game);
+        JSONObject res = buildResponse("code", "1");
+        return res.toJSONString();
+    }
+
+    @RequestMapping(value = "files", method = RequestMethod.POST, produces = "application/json;charset=utf8")
+    @ResponseBody
+    public String uploadMultipleFileHandler(@RequestParam("file") MultipartFile[] files, HttpServletRequest req) throws IOException {
+        String tempDir = req.getSession().getServletContext().getRealPath("/") + "temp/";
         for (int i = 0; i < files.length; i++) {
-            if (!files[i].isEmpty()) {
-                MultipartFile file = files[i];
+            MultipartFile file = files[i];
+            if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
                 String fileSuffix = fileName.substring(fileName.lastIndexOf("."), fileName.length());
                 try {
-                    file.transferTo(new File(tempDir + (i + 1) + fileSuffix));
+                    file.transferTo(new File(tempDir + fileNum + fileSuffix));
+                    fileNum = fileNum+1;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-        return "redirect:/game";
+        JSONObject result = buildResponse("result", "ok");
+        return result.toJSONString();
+    }
+
+    @RequestMapping(value = "setStatus/{key}/status", method = RequestMethod.GET)
+    public String setGameStatus(@PathVariable String key, @PathVariable int status){
+        GameBean game = dataMap.get(key);
+        game.setStatus(status);
+        dataMap.put(key, game);
+        JSONObject res = buildResponse("code",1);
+        return res.toJSONString();
     }
 
 }

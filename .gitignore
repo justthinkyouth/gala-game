@@ -1,7 +1,7 @@
 .idea
 gala-game.iml
 target/
-web/content/META-INF/MANIFEST.MF
-web/content/WEB-INF/classes
-web/WEB-INF/META-INF/MANIFEST.MF
+web/META-INF/MANIFEST.MF
 web/WEB-INF/classes
+web/WEB-INF/lib
+web/temp
