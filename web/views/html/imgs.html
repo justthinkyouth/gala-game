@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable="/>
     <title>Title</title>
 </head>
 <style>
@@ -21,12 +22,55 @@
         margin-left: calc(50vw - 130px);
         text-align: center;
     }
-
+    .lip{
+        width: 124px;
+        height: 86px;
+        position: fixed;
+        margin-top: calc(50vh - 170px);
+        margin-left: calc(50vw - 85px);
+        display: none;
+    }
+    .start{
+        width: 159px;
+        height: 159px;
+        position: fixed;
+        margin-top: calc(50vh - 159px);
+        margin-left: calc(50vw - 109px);
+    }
+    .kissCount{
+        background-color: #2b542c;
+        color: #fff;
+        font-size: 48px;
+        text-align: center;
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        display: none;
+    }
 </style>
 <body>
-<div class="circle" onclick="start()"></div>
+<span class="kissCount">0</span>
+<img src="../img/lip.png" class="lip">
+<img src="../img/start.png" class="start" onclick="start()">
+
 <script src="../js/jquery.min.js"></script>
 <script>
+    /*window.onload=function () {
+        document.addEventListener('touchstart',function (event) {
+            if(event.touches.length>1){
+                event.preventDefault();
+            }
+        })
+        var lastTouchEnd=0;
+        document.addEventListener('touchend',function (event) {
+            var now=(new Date()).getTime();
+            if(now-lastTouchEnd<=300){
+                event.preventDefault();
+            }
+            lastTouchEnd=now;
+        },false)
+    }*/
+
     var n = 1;
     function setImg() {
         n = n+1;
@@ -38,8 +82,28 @@
     }
 
     function start(){
-        setInterval(setImg, 100);
+        $(".start").hide();
+        var startTime = new Date().getTime();
+        var interval = setInterval(function () {
+            setImg();
+            if(new Date().getTime() - startTime > 3000){
+                clearInterval(interval);
+                $(".lip").show();
+                $(".kissCount").show();
+            }
+            return;
+        }, 100);
     }
+
+    var kissCount = 0;
+    function kissConnt() {
+        kissCount = kissCount+1;
+        $(".kissCount").text(kissCount);
+    }
+    $(".lip").bind("tap",function(){
+        kissCount = kissCount+1;
+        $(".kissCount").text(kissCount);
+    });
 </script>
 </body>
 </html>
