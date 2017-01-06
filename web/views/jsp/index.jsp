@@ -41,8 +41,10 @@
             <hr>
             <div class="form-group">
                 <button id="saveBnt" class="btn btn-warning" type="button" onclick="submitForm()">保存</button>
-                <button class="btn btn-info" type="button" onclick="start()">开始</button>
-                <button class="btn btn-primary" onclick="result()">查看结果</button>
+                <c:if test="game.status ==0">
+                    <button class="btn btn-info" type="button" onclick="start()">开始</button>
+                </c:if>
+                <button class="btn btn-primary" type="button" onclick="result()">查看结果</button>
             </div>
         </form>
     </div>
@@ -137,7 +139,7 @@
                         $("#saveBnt").hide();
                         alert(res.message);
                     } else{
-                        alert(res.message);
+                        alert("开始");
                     }
                 }
             });

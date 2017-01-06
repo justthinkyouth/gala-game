@@ -11,8 +11,8 @@ public class Game {
     private String gameName;
     /* 0、1.开始、 2结束**/
     private int status;
-    private long rollTimes;
-    private long gameTimes;
+    private Long rollTimes;
+    private Long gameTimes;
     private Date startTime;
     private Avatar winAvatar;
     private List<Avatar> shortlist = new ArrayList<Avatar>();
@@ -41,19 +41,19 @@ public class Game {
         this.status = status;
     }
 
-    public long getRollTimes() {
+    public Long getRollTimes() {
         return rollTimes;
     }
 
-    public void setRollTimes(long rollTimes) {
+    public void setRollTimes(Long rollTimes) {
         this.rollTimes = rollTimes;
     }
 
-    public long getGameTimes() {
+    public Long getGameTimes() {
         return gameTimes;
     }
 
-    public void setGameTimes(long gameTimes) {
+    public void setGameTimes(Long gameTimes) {
         this.gameTimes = gameTimes;
     }
 

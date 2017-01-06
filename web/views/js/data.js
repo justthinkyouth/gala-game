@@ -45,10 +45,29 @@ function getResult() {
         url: ctx+"/game/getResults",
         type: "get",
         success: function (res) {
-            if(res){
+            if(!res){
                 alert("服务器正在拼命统计结果，稍后重试.");
             } else {
-                
+                var html = [];
+                var i = 0;
+                $.each(res, function (k, user) {
+                    var badge = '';
+                    if(i == 0){
+                        badge = '<img class="badge" src="../img/badge-1.jpg" alt=""/>';
+                    } else if(i == 1){
+                        badge = '<img class="badge" src="../img/badge-2.jpg" alt=""/>';
+                    } else if(i == 2){
+                        badge = '<img class="badge" src="../img/badge-3.jpg" alt=""/>';
+                    }
+                    html.push('<div class="list flex">'
+                        +'<img class="pic" src="'+user.avatarUrl+'" alt="man"/>'
+                        +'<div class="name">'+user.nickName+'</div>'
+                        +'<div class="num">'+user.num+'</div>'
+                        +badge
+                        +'</div>');
+                    i++;
+                });
+                $(".container").html(html.join(""));
             }
 
         }    

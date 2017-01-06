@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.cnbexpress.beans.Avatar;
 import com.cnbexpress.beans.Game;
 import com.cnbexpress.beans.User;
-import com.cnbexpress.weixin.api.WxMpConfigStorage;
 import com.cnbexpress.weixin.api.WxMpInMemoryConfigStorage;
 import com.cnbexpress.weixin.api.WxMpService;
 import com.cnbexpress.weixin.api.WxMpServiceImpl;
@@ -24,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,7 +35,7 @@ public class GamesServiceImpl extends BaseServiceImpl{
 
     private int fileNum = 0;
     public static Game game = new Game();
-    public static Map<String, User> userMap;
+    public static Map<String, User> userMap = new HashMap<String, User>();
     public WxMpService wxMpService;
 
     @PostConstruct
@@ -59,7 +59,7 @@ public class GamesServiceImpl extends BaseServiceImpl{
         try {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxMpService.userInfo(wxMpOAuth2AccessToken.getOpenId(), "zh_CN");
-            User user = new User(wxMpUser.getOpenId(), wxMpUser.getHeadImgUrl(), wxMpUser.getNickname());
+            User user = new User(wxMpUser.getOpenId(), wxMpUser.getNickname(), wxMpUser.getHeadImgUrl());
             userMap.put(wxMpUser.getOpenId(), user);
             req.getSession().setAttribute("join_user", user);
         } catch (WxErrorException e) {
@@ -152,6 +152,13 @@ public class GamesServiceImpl extends BaseServiceImpl{
         JSONObject res = buildResponse("code",1);
         return res.toJSONString();
     }
+    @RequestMapping(value = "/refreshGame", method = RequestMethod.GET)
+    @ResponseBody
+    public String refreshGame(){
+        game.setStartTime(new Date());
+        JSONObject res = buildResponse("code","ok");
+        return res.toJSONString();
+    }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     @ResponseBody
@@ -161,21 +168,31 @@ public class GamesServiceImpl extends BaseServiceImpl{
 
     @RequestMapping(value = "/getGameUserInfo", method = RequestMethod.POST)
     @ResponseBody
-    public User joinGame(HttpServletRequest req){
+    public User getGameUserInfo(HttpServletRequest req){
         User user = (User) req.getSession().getAttribute("join_user");
-        long currentTimes = System.currentTimeMillis();
-        long startTimes = game.getStartTime().getTime();
-        long gameTimes = game.getGameTimes() - (currentTimes-startTimes);
-        user.setTimes(gameTimes);
-        user.setGame(game);
-        return user;
+        if(user != null){
+            if(game.getStatus() == 1){
+                long currentTime = System.currentTimeMillis();
+                long startTimes = game.getStartTime().getTime();
+                long startedTime = currentTime-startTimes;
+                user.setRollTimes(game.getRollTimes() - startedTime);
+                user.setGameTimes(user.getRollTimes() >= 0 ? game.getGameTimes() : game.getGameTimes() + user.getRollTimes());
+            }
+            user.setGame(game);
+            return user;
+        } else {
+            return null;
+        }
+
+
     }
 
-    @RequestMapping(value = "/result", method = RequestMethod.GET)
+    @RequestMapping(value = "/result", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateUserResult(@RequestParam String mobile, @RequestParam long num){
-        User user = userMap.get(mobile);
+    public JSONObject updateUserResult(@RequestParam String openId, @RequestParam long num){
+        User user = userMap.get(openId);
         user.setNum(num);
+        userMap.put(openId, user);
         return buildResponse("code", 1);
     }
 

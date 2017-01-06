@@ -1,1 +1,1 @@
-var ctx = "http://192.168.1.181:8080";
+var ctx = "http://tomtao.cnbexpress.com";

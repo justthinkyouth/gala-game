@@ -72,38 +72,44 @@
         var gameTimes = 0;
         function joinGame() {
             $.ajax({
-               url: ctx+"/game/getGameUserInfo",
-               type: "post",
-               success: function (res) {
-                   game = res.game;
-                    if(game.status == 1){
-                        shortlist = game.shortlist;
-                        l = shortlist.length;
-                        rollTimes = game.rollTimes;
-                        gameTimes = game.gameTimes;
-                        start();
+                url: ctx + "/game/getGameUserInfo",
+                type: "post",
+                success: function (res) {
+                    if (res) {
+                        localStorage.openId = res.openId;
+                        game = res.game;
+                        if (game.status == 1) {
+                            shortlist = game.shortlist;
+                            l = shortlist.length;
+                            rollTimes = res.rollTimes;
+                            gameTimes = res.gameTimes;
+                            start();
+                        } else {
+                            alert('游戏还未开始，敬请期待！');
+                        }
                     } else {
-                        alert('游戏还未开始，敬请期待！');
+                        alert('登录失效，请重新从微信菜单进入。');
                     }
-               } 
+                }
             });
         }
+
         function setImg() {
-            if(n >= l){
+            if (n >= l) {
                 n = 0;
             }
-            var imgUrl = "/temp/"+wqfacList[n].url;
-            $(".persion-img").css("background-image","url("+imgUrl+")");
-            n = n+1;
+            var imgUrl = "/temp/" + shortlist[n].url;
+            $(".persion-img").css("background-image", "url(" + imgUrl + ")");
+            n = n + 1;
         }
 
-        function start(){
+        function start() {
             var startTime = new Date().getTime();
             var interval = setInterval(function () {
                 setImg();
-                if(new Date().getTime() - startTime > rollTimes){
+                if (new Date().getTime() - startTime > rollTimes) {
                     clearInterval(interval);
-                    $(".persion-img").css("background-image","url(/temp/"+game.winAvatar.url+")");
+                    $(".persion-img").css("background-image", "url(/temp/" + game.winAvatar.url + ")");
                     $(".lip").show();
                     settime();
                 }
@@ -111,16 +117,27 @@
             }, 100);
         }
 
-        var kissCount = 0;
+        if (!localStorage.kissCount) {
+            localStorage.kissCount = 0;
+        }
         $(".lip").bind("touchstart", function () {
-            kissCount = kissCount+1;
-            $(".kissCount").text(kissCount);
+            localStorage.kissCount = parseInt(localStorage.kissCount) + 1;
+            $(".kissCount").text(localStorage.kissCount);
         })
 
         function settime(obj) {
             if (gameTimes <= 0) {
-                alert('游戏结束');
-                //TODO
+                // TODO 禁用点击事件，提交最后数据
+                alert('游戏结束，数据正在提交服务器...');
+                $.ajax({
+                    url: ctx+"/game/result",
+                    type: "post",
+                    data: {openId: localStorage.openId, num: localStorage.kissCount},
+                    success: function (res) {
+                        window.location.href = "../data.html";
+                    }
+                });
+
                 return;
             }
             gameTimes = gameTimes - 1000;

@@ -8,7 +8,8 @@ public class User {
     private String openId;
     private String nickName;
     private String avatarUrl;
-    private long times;
+    private long rollTimes;
+    private long gameTimes;
     private long num;
 
     public User(String openId, String nickName, String avatarUrl) {
@@ -49,19 +50,27 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public long getTimes() {
-        return times;
-    }
-
-    public void setTimes(long times) {
-        this.times = times;
-    }
-
     public long getNum() {
         return num;
     }
 
     public void setNum(long num) {
         this.num = num;
+    }
+
+    public long getRollTimes() {
+        return rollTimes;
+    }
+
+    public void setRollTimes(long rollTimes) {
+        this.rollTimes = rollTimes;
+    }
+
+    public long getGameTimes() {
+        return gameTimes;
+    }
+
+    public void setGameTimes(long gameTimes) {
+        this.gameTimes = gameTimes;
     }
 }

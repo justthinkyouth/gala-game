@@ -1,0 +1,12 @@
+{
+  "button": [
+    {
+      "type":"view",
+      "name":"进入游戏",
+      "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6f8a43d77aef8df8&redirect_uri=http://tomtao.cnbexpress.com/game/joinGame&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
+    }
+  ]
+}
+
+
+
