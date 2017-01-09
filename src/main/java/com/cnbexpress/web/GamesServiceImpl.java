@@ -22,9 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tom on 16-12-30.
@@ -183,8 +181,6 @@ public class GamesServiceImpl extends BaseServiceImpl{
         } else {
             return null;
         }
-
-
     }
 
     @RequestMapping(value = "/result", method = RequestMethod.POST)
@@ -198,9 +194,23 @@ public class GamesServiceImpl extends BaseServiceImpl{
 
     @RequestMapping(value = "/getResults", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, User> getUserMap(){
+    public List<User> getUserMap(){
         //TODO 判断游戏是否结束，通常会在游戏结束后几秒获取
-        return userMap;
+        List<User> userList = new ArrayList<>();
+        for(String key: userMap.keySet()){
+            userList.add(userMap.get(key));
+        }
+        Collections.sort(userList, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                if(o1.getNum() > o2.getNum()){
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        return userList;
     }
 
 }
